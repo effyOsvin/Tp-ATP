@@ -13,7 +13,7 @@ class MermaidFactory extends Factory {
     }
 
     @Override
-    WaterForce createInfantry() {
+    WaterForce createWaterForce() {
         return new WaterForce(80, 40, 0, fraction);
     }
 }
