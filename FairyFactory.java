@@ -13,7 +13,7 @@ class FairyFactory extends Factory {
     }
 
     @Override
-    WaterForce createInfantry() {
+    WaterForce createWaterForce() {
         return new WaterForce(75, 25, 0, fraction);
     }
 }
