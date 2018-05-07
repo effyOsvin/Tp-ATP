@@ -25,7 +25,7 @@ public class Client {
     }
 
     public void createWaterForce() {
-        Unit unit = fraction.createInfantry();
+        Unit unit = fraction.createWaterForce();
         forces.add(unit);
         GameWorld.getGameWorld().addUnit(unit);
     }
