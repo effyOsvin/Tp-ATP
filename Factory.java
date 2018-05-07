@@ -4,5 +4,5 @@ abstract class Factory {
 
     abstract GroundForce createGroundForce();
 
-    abstract WaterForce createInfantry();
+    abstract WaterForce createWaterForce();
 }
