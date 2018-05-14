@@ -1,31 +1,32 @@
-import java.util.ArrayList;
-import java.util.List;
+import javafx.util.Pair;
+import java.util.HashSet;
 
-public class Client {
+// структурный патерн - Адаптерн
+public class Client implements Runnable {
 
-    private List<Unit> forces;
+    private HashSet<Unit> forces;
 
-    private Factory fraction;
+    private Factory race;
 
-    Client(Factory fraction) {
-        this.fraction = fraction;
-        this.forces = new ArrayList<>();
+    Client(Factory race) {
+        this.race = race;
+        this.forces = new HashSet<>();
     }
 
     public void createAirForce() {
-        Unit unit = fraction.createAirForce();
+        Unit unit = race.createAirForce();
         forces.add(unit);
         GameWorld.getGameWorld().addUnit(unit);
     }
 
     public void createGroundForce() {
-        Unit unit = fraction.createGroundForce();
+        Unit unit = race.createGroundForce();
         forces.add(unit);
         GameWorld.getGameWorld().addUnit(unit);
     }
 
     public void createWaterForce() {
-        Unit unit = fraction.createWaterForce();
+        Unit unit = race.createWaterForce();
         forces.add(unit);
         GameWorld.getGameWorld().addUnit(unit);
     }
@@ -36,10 +37,19 @@ public class Client {
         myUnit.attack(enemyUnit);
     }
 
-    public void explore() {
+    public String getClientRace() {
+        return race.getClass().getTypeName();
     }
 
-    public String getClientFraction() {
-        return fraction.getClass().getTypeName();
+    @Override
+    public void run() {
+        ClientInterface clientInterface = new ClientInterface(this);
+        clientInterface.show();
+    }
+
+    public void move(Unit myUnit, Pair<Integer, Integer> coords) {
+        if (!GameWorld.getGameWorld().findUnit(myUnit))
+            return;
+        myUnit.move(coords);
     }
 }
