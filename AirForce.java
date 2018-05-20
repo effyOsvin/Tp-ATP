@@ -1,12 +1,6 @@
 class AirForce extends Unit {
 
-    AirForce(int health, int damage, int protection, String unitFraction) {
-        super(health, damage, protection, unitFraction);
-    }
-
-    public void attack() {
-    }
-
-    public void explore() {
+    AirForce(int health, int damage, int protection, int attackRange, String unitFraction) {
+        super(health, damage, protection, attackRange, unitFraction);
     }
 }
