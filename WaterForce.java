@@ -1,15 +1,6 @@
 class WaterForce extends Unit {
 
-    WaterForce(int health, int damage, int protection, String unitFraction) {
-        super(health, damage, protection, unitFraction);
-    }
-
-    public void attack() {
-    }
-
-    public void defend() {
-    }
-
-    public void explore() {
+    WaterForce(int health, int damage, int protection, int attackRange, String unitRace) {
+        super(health, damage, protection, attackRange, unitRace);
     }
 }
