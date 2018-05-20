@@ -1,19 +1,31 @@
 class WitchFactory extends Factory {
 
-    public static String fraction = WitchFactory.class.getTypeName();
+    public static String race = WitchFactory.class.getTypeName();
 
     @Override
     AirForce createAirForce() {
-        return new AirForce(80, 20, 0, fraction);
+        return new AirForce(UnitCharacteristics.Witch_Air_Health,
+                UnitCharacteristics.Witch_Air_Damage,
+                UnitCharacteristics.Witch_Air_Protect,
+                UnitCharacteristics.Witch_Air_Range,
+                race);
     }
 
     @Override
     GroundForce createGroundForce() {
-        return new GroundForce(90, 30, 0, fraction);
+        return new GroundForce(UnitCharacteristics.Witch_Ground_Health,
+                UnitCharacteristics.Witch_Ground_Damage,
+                UnitCharacteristics.Witch_Ground_Protect,
+                UnitCharacteristics.Witch_Ground_Range,
+                race);
     }
 
     @Override
     WaterForce createWaterForce() {
-        return new WaterForce(70, 10, 0, fraction);
+        return new WaterForce(UnitCharacteristics.Witch_Water_Health,
+                UnitCharacteristics.Witch_Water_Damage,
+                UnitCharacteristics.Witch_Water_Protect,
+                UnitCharacteristics.Witch_Water_Range,
+                race);
     }
 }
