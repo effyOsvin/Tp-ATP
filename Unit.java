@@ -1,44 +1,66 @@
-import java.util.PriorityQueue;
 import javafx.util.Pair;
-
+import java.util.TreeSet;
+// паттерн Компоновщик
 public class Unit {
 
     private int health;
     private int damage;
     private int protection;
-    private String unitFraction;
+    private int attackRange;
+    private int x, y; // координаты
+    private String unitRace;
 
     //атакуют врагов с минимальным здоровьем
-    private PriorityQueue<Unit> enemies;
+    private TreeSet<Unit> enemies;
 
-    private Pair<Integer, Integer> coords;
-
-    Unit(int health, int damage, int protection, String unitFraction) {
+    Unit(int health, int damage, int protection, int attackRange, String unitRace) {
         this.health = health;
         this.damage = damage;
         this.protection = protection;
-        this.unitFraction = unitFraction;
-        enemies = new PriorityQueue<>(1, new EnemyComparator());
+        this.attackRange = attackRange;
+        this.unitRace = unitRace;
+        enemies = new TreeSet<>(new EnemyComparator());
     }
 
-    int getHealth() {
+    synchronized int getHealth() {
         return this.health;
     }
 
-    public Pair<Integer, Integer> getCoords() {
-        return coords;
+    public int getAttackRange() {
+        return this.attackRange;
     }
 
-    public void setCoords(int x, int y) {
-        this.coords = new Pair<>(x, y);
+    public synchronized Pair<Integer, Integer> getCoords() {
+        return new Pair<>(x, y);
     }
 
-    String getUnitFraction() {
-        return unitFraction;
+    private synchronized void setCoords(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public boolean attack(Unit otherUnit) {
-        return otherUnit.takeDamage(this, damage);
+    public void setCoords(Pair<Integer, Integer> coords) {
+        setCoords(coords.getKey(), coords.getValue());
+    }
+
+    String getUnitRace() {
+        return unitRace;
+    }
+
+    public boolean attack(Unit enemy) {
+        if (GameWorld.getGameWorld().findUnit(enemy)) {
+            enemies.add(enemy);
+            int distance = Math.abs(x - enemy.getCoords().getKey())
+                    + Math.abs(y - enemy.getCoords().getValue());
+            if (distance > attackRange) {
+                return false;
+            }
+            enemy.takeDamage(this, damage);
+            return enemy.takeDamage(this, damage);
+        } else {
+            enemies.remove(enemy);
+            return false;
+        }
     }
 
     private boolean takeDamage(Unit enemy, int damage) {
@@ -50,5 +72,9 @@ public class Unit {
             GameWorld.getGameWorld().discardUnit(this); // юнит мертв
             return true;
         }
+    }
+
+    public void step(int deltaX, int deltaY) {
+        this.setCoords(this.x + deltaX, this.y + deltaY);
     }
 }
