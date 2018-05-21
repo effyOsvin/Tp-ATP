@@ -4,13 +4,11 @@ import java.util.Random;
 // Поведенчиский паттерн - Наблюдатель
 public class GameWorld {
 
-    public static volatile int GAME_MAP_SIZE = 100;
-
     private static GameWorld gameWorld = null;
     private static Unit[][] map;
 
     private GameWorld() {
-        map = new Unit[GAME_MAP_SIZE][GAME_MAP_SIZE];
+        map = new Unit[GameWorldConfig.GAME_MAP_SIZE][GameWorldConfig.GAME_MAP_SIZE];
     }
 
     public static GameWorld getGameWorld() {
@@ -24,8 +22,8 @@ public class GameWorld {
         Random random = new Random();
         int x, y;
         do {
-            x = random.nextInt(GAME_MAP_SIZE);
-            y = random.nextInt(GAME_MAP_SIZE);
+            x = random.nextInt(GameWorldConfig.GAME_MAP_SIZE);
+            y = random.nextInt(GameWorldConfig.GAME_MAP_SIZE);
         } while (map[x][y] != null);
         return new Pair<>(x, y);
     }
