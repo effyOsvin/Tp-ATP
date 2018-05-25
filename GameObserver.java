@@ -3,18 +3,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-// Порождающий паттерн - Синглтон
-// Поведенчиский паттерн - Наблюдатель
 public class GameObserver {
 
     private static GameObserver gameObserver = null;
 
     private Set<Unit> units;
-    private Set<Squad> squads;
 
     private GameObserver() {
         units = new HashSet<>();
-        squads = new HashSet<>();
     }
 
     public static GameObserver getGameObserver() {
@@ -38,14 +34,6 @@ public class GameObserver {
         units.remove(unit);
     }
 
-    public void handleSquad(Squad squad) {
-        squads.add(squad);
-    }
-
-    public boolean checkSquad(Squad squad) {
-        return squads.contains(squad);
-    }
-
     public boolean checkAmount() {
         return units.size() < GameWorldConfig.GAME_MAP_SIZE * GameWorldConfig.GAME_MAP_SIZE;
     }
@@ -55,16 +43,6 @@ public class GameObserver {
         for (Unit unit : units) {
             if (fraction.equals(unit.getUnitRace()) == proper) {
                 allies.addLast(unit);
-            }
-        }
-        return allies;
-    }
-
-    public List<Squad> getSquads(String fraction) {
-        LinkedList<Squad> allies = new LinkedList<>();
-        for (Squad squad : squads) {
-            if (fraction.equals(squad.getUnitRace())) {
-                allies.addLast(squad);
             }
         }
         return allies;
