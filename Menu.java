@@ -2,7 +2,7 @@ public class Menu {
 
     public Menu() {}
 
-    private Client createClient(int fractionCode, boolean artificialIntelligence) {
+    private Client createClient(int fractionCode) {
         ArtificialIntelligence client;
         switch (fractionCode) {
             case 1:
@@ -48,7 +48,7 @@ public class Menu {
                     ConsoleInterface.inputMismatchWarning();
                 }
             } while (!requestSuccess);
-            clients[i] = createClient(fractionCode, i != 0);
+            clients[i] = createClient(fractionCode);
         }
 
         return clients;
