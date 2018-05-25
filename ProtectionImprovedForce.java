@@ -12,7 +12,7 @@ public class ProtectionImprovedForce extends ImprovedForce {
     }
 
     @Override
-    public synchronized void takeDamage(Unit enemy, int damage) {
+    public void takeDamage(Unit enemy, int damage) {
         originalForce.takeDamage(enemy, (int) ((1 - this.misAttackValue) * damage));
     }
 }
