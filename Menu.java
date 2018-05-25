@@ -1,12 +1,7 @@
-import java.util.Scanner;
-
 public class Menu {
 
-    private Scanner in;
 
-    public Menu() {
-        in = new Scanner(System.in);
-    }
+    public Menu() {    }
 
     private Client createClient(int fractionCode, boolean artificialIntelligence) {
         ArtificialIntelligence client;
@@ -39,11 +34,11 @@ public class Menu {
 
         System.out.println("Choose your race and race your enemy:\n" +
                 "> type '1' for Fairy\n" +
-                "> type '2' for Witch\n" +
-                "> type '3' for Mermaid");
+                "> type '2' for Mermaid\n" +
+                "> type '3' for Witch");
 
         Client[] clients = new Client[2];
-        
+
         for (int i = 0; i < 2; i++) {
             requestSuccess = false;
             int fractionCode;
