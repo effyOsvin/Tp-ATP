@@ -4,6 +4,7 @@ import java.util.Random;
 // Поведенчиский паттерн - Наблюдатель
 public class GameWorld {
 
+
     private static GameWorld gameWorld = null;
     private static Unit[][] map;
 
@@ -36,7 +37,7 @@ public class GameWorld {
         map[unit.getCoords().getKey()][unit.getCoords().getValue()] = unit;
     }
 
-    public void unitMove(int prevX, int prevY, int nextX, int nextY) {
+    public void unitMarch(int prevX, int prevY, int nextX, int nextY) {
         map[nextX][nextY] = map[prevX][prevY];
         map[prevX][prevY] = null;
     }
