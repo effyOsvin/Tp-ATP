@@ -1,6 +1,6 @@
 class WitchFactory extends Factory {
 
-    public static String race = WitchFactory.class.getTypeName();
+    public static String race = "Witch";
 
     @Override
     AirForce createAirForce() {
@@ -27,5 +27,10 @@ class WitchFactory extends Factory {
                 UnitCharacteristics.Witch_Water_Protect,
                 UnitCharacteristics.Witch_Water_Range,
                 race);
+    }
+
+    @Override
+    String getFactory(){
+        return race;
     }
 }

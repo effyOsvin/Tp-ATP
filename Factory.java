@@ -6,4 +6,6 @@ abstract class Factory {
     abstract GroundForce createGroundForce();
 
     abstract WaterForce createWaterForce();
+
+    abstract String getFactory();
 }

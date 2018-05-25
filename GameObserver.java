@@ -35,7 +35,7 @@ public class GameObserver {
     }
 
     public boolean checkAmount() {
-        return units.size() < GameWorldConfig.GAME_MAP_SIZE * GameWorldConfig.GAME_MAP_SIZE;
+        return units.size() + 2 < GameWorldConfig.GAME_MAP_SIZE * GameWorldConfig.GAME_MAP_SIZE;
     }
 
     public List<Unit> getUnits(String fraction, boolean proper) {

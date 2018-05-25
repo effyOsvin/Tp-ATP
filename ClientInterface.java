@@ -24,34 +24,14 @@ public class ClientInterface {
             System.out.print("$> ");
             String command = this.in.next().toLowerCase();
             switch (command) {
-                case "/allies_forces_info":
+                case "/my_info":
                     showForcesInfo(client.getUnits(true));
                     break;
-                case "/enemies_forces_info":
+                case "/enemies_info":
                     showForcesInfo(client.getUnits(false));
                     break;
-                case "/create_air_force":
-                    client.receiveCommand(new CreateAirForceCommand());
-                    commandCode = 1;
-                    break;
-                case "/create_ground_force":
-                    client.receiveCommand(new CreateGroundForceCommand());
-                    commandCode = 1;
-                    break;
-                case "/create_water_force":
-                    client.receiveCommand(new CreateWaterForceCommand());
-                    commandCode = 1;
-                    break;
                 case "/set_unit":
-                    commandCode = setUnitCommand();
-                    break;
-                case "/create_squad":
-                    createSquadCommand();
-                    commandCode = 0;
-                    break;
-                case "/set_squad":
-                    setSquadCommand();
-                    commandCode = 1;
+                    commandCode = setUnit();
                     break;
                 case "/help":
                     ConsoleInterface.help();
@@ -70,7 +50,7 @@ public class ClientInterface {
         return commandCode == -1;
     }
 
-    private int setUnitCommand() {
+    private int setUnit() {
         int x, y;
         x = ConsoleInterface.getInput();
         y = ConsoleInterface.getInput();
@@ -86,12 +66,6 @@ public class ClientInterface {
             switch (command) {
                 case "/cancel":
                     return 0;
-                case "/allies_forces_info":
-                    showForcesInfo(client.getUnits(true));
-                    break;
-                case "/enemies_forces_info":
-                    showForcesInfo(client.getUnits(false));
-                    break;
                 case "/attack":
                     int enemieX, enemieY;
                     enemieX = ConsoleInterface.getInput();
@@ -131,14 +105,6 @@ public class ClientInterface {
                         System.out.println("Can't make move!");
                     }
                     break;
-                case "/update_attack":
-                    commandCode = 1;
-                    client.wrapUnit(x, y, 1);
-                    break;
-                case "/update_protection":
-                    commandCode = 1;
-                    client.wrapUnit(x, y, 2);
-                    break;
                 case "/help":
                     ConsoleInterface.help();
                     break;
@@ -154,12 +120,6 @@ public class ClientInterface {
             }
         } while (commandCode == 0);
         return commandCode;
-    }
-
-    private void createSquadCommand() {
-    }
-
-    private void setSquadCommand() {
     }
 
     private boolean capitulate() {
@@ -181,9 +141,9 @@ public class ClientInterface {
 
     private void showForcesInfo(List<Unit> units) {
         for (Unit unit : units) {
-            String unitType = unit.getClass().getTypeName().split("\\.")[2].toLowerCase();
-            String unitFraction = unit.getUnitRace().split("\\.")[1].replace("Fraction", "");
-            System.out.println(unitFraction + " " + unitType +
+            String unitType = unit.getUnitForcee();
+            String unitFraction = unit.getUnitRace();
+            System.out.println("Race " + unitFraction + " " + unitType +
                     "\n\t # health: " + unit.getHealth() +
                     "\n\t # attack range: " + unit.getAttackRange() +
                     "\n\t # coords:" + "(" + unit.getCoords().getKey() + "; " + unit.getCoords().getValue() + ")"

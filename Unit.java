@@ -9,18 +9,20 @@ public abstract class Unit {
     private int attackRange;
     private int x, y; // координаты
     private String unitRace;
+    private String unitForce;
 
     //атакуют врагов с минимальным здоровьем
     private TreeSet<Unit> enemies;
 
     Unit( ){ }
 
-    Unit(int health, int damage, int protection, int attackRange, String unitRace) {
+    Unit(int health, int damage, int protection, int attackRange, String unitRace, String unitForce) {
         this.health = health;
         this.damage = damage;
         this.protection = protection;
         this.attackRange = attackRange;
         this.unitRace = unitRace;
+        this.unitForce = unitForce;
         enemies = new TreeSet<>(new UnitComporator());
     }
 
@@ -47,6 +49,10 @@ public abstract class Unit {
 
     String getUnitRace() {
         return unitRace;
+    }
+
+    String getUnitForcee() {
+        return unitForce;
     }
 
     public boolean attack(Unit enemy) {

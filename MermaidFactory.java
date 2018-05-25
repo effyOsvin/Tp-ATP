@@ -1,6 +1,6 @@
 class MermaidFactory extends Factory {
 
-    public static String race = MermaidFactory.class.getTypeName();
+    public static String race = "Mermaid";
 
     @Override
     AirForce createAirForce() {
@@ -27,5 +27,10 @@ class MermaidFactory extends Factory {
                 UnitCharacteristics.Mermaid_Water_Protect,
                 UnitCharacteristics.Mermaid_Water_Range,
                 race);
+    }
+
+    @Override
+    String getFactory(){
+        return race;
     }
 }

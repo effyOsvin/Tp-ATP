@@ -19,35 +19,56 @@ public class Client {
         this.clientInterface = new ClientInterface(this);
     }
 
+    public void start(int count){
+        createAirForce(count);
+        createWaterForce(count);
+        createGroundForce(count);
+    }
+
     public boolean giveOrder() {
+
         return this.clientInterface.run();
     }
 
-    public void receiveCommand(CreateCommand command) {
-        command.execute(this);
+    public boolean giveOrderBot() {
+        if(getUnits(true).size() == 0){
+            return true;
+        }
+        return false;
     }
 
-    public void createAirForce() {
+    public Integer countUnits(){
+        System.out.println("Choose size of your army");
+        return ConsoleInterface.getInput();
+    }
+
+    public void createAirForce(int count) {
         if (observer.checkAmount()) {
-            Unit unit = factory.createAirForce();
-            unit.setCoords(world.generateCoords());
-            observer.handleUnit(unit);
+            for(Integer i = 0; i < count; i++) {
+                Unit unit = factory.createAirForce();
+                unit.setCoords(world.generateCoords());
+                observer.handleUnit(unit);
+            }
         }
     }
 
-    public void createGroundForce() {
+    public void createGroundForce(int count) {
         if (observer.checkAmount()) {
-            Unit unit = factory.createGroundForce();
-            unit.setCoords(world.generateCoords());
-            observer.handleUnit(unit);
+            for(Integer i = 0; i < count; i++) {
+                Unit unit = factory.createGroundForce();
+                unit.setCoords(world.generateCoords());
+                observer.handleUnit(unit);
+            }
         }
     }
 
-    public void createWaterForce() {
+    public void createWaterForce(int count) {
         if (observer.checkAmount()) {
-            Unit unit = factory.createWaterForce();
-            unit.setCoords(world.generateCoords());
-            observer.handleUnit(unit);
+            for(Integer i = 0; i < count; i++) {
+                Unit unit = factory.createWaterForce();
+                unit.setCoords(world.generateCoords());
+                observer.handleUnit(unit);
+            }
         }
     }
 
@@ -87,25 +108,7 @@ public class Client {
         return false;
     }
 
-    public void wrapUnit(int x, int y, int wrapCode) {
-        switch (wrapCode) {
-            case 1:
-                replaceWrappedUnit(world.getUnit(x, y),
-                        new AttackImprovedForce(world.getUnit(x, y)));
-                break;
-            case 2:
-                replaceWrappedUnit(world.getUnit(x, y),
-                        new ProtectionImprovedForce(world.getUnit(x, y)));
-                break;
-        }
-    }
-
-    private void replaceWrappedUnit(Unit wrapped, Unit wrapper) {
-        observer.discardUnit(wrapped);
-        observer.handleUnit(wrapper);
-    }
-
     private String getClientFactory() {
-        return this.factory.getClass().getTypeName();
+        return this.factory.getFactory();
     }
 }

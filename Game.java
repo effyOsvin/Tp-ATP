@@ -1,22 +1,29 @@
-import java.util.LinkedList;
-
 class Game {
 
     void run() {
 
-        LinkedList<Client> clients = new LinkedList<>();
+        //GameWorld gameWorld = GameWorld.getGameWorld();
+        //GameObserver gameObserver = GameObserver.getGameObserver();
+        Client client;
+        Client bot;
         Menu menu = new Menu();
 
-        for (Client client : menu.run()) {
-            clients.addLast(client);
-        }
+        menu.run();
+        client = menu.getClient();
+        bot = menu.getClient();
 
-        clients.get(0).setClientInterface();
+        client.setClientInterface();
+        bot.setClientInterface();
+
+        Integer count = client.countUnits();
+
+        client.start(count);
+        bot.start(count);
         boolean clientCapitulate = false, botsCapitulate = false;
 
         while (!clientCapitulate && !botsCapitulate) {
-            clientCapitulate = clients.get(0).giveOrder();
-            botsCapitulate = clients.get(1).giveOrder();
+            clientCapitulate = client.giveOrder();
+            botsCapitulate = client.giveOrderBot();
         }
         ClientInterface.showGameResult(clientCapitulate, botsCapitulate);
     }

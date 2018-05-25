@@ -1,6 +1,6 @@
 class FairyFactory extends Factory {
 
-    private static final String race = FairyFactory.class.getTypeName();
+    private static final String race = "Fairy";
 
     @Override
     AirForce createAirForce() {
@@ -27,5 +27,10 @@ class FairyFactory extends Factory {
                 UnitCharacteristics.Fairy_Water_Protect,
                 UnitCharacteristics.Fairy_Air_Range,
                 race);
+    }
+
+    @Override
+    String getFactory(){
+        return race;
     }
 }
