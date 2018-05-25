@@ -1,55 +1,111 @@
-import javafx.util.Pair;
-import java.util.HashSet;
+import java.util.List;
 
-// структурный патерн - Адаптерн
-public class Client implements Runnable {
+//структурный паттерн - Адаптер
+public class Client {
 
-    private HashSet<Unit> forces;
+    private Factory factory;
+    private GameObserver observer;
+    private GameWorld world;
 
-    private Factory race;
+    private ClientInterface clientInterface = null;
 
-    Client(Factory race) {
-        this.race = race;
-        this.forces = new HashSet<>();
+    public Client(Factory factory) {
+        this.factory = factory;
+        observer = GameObserver.getGameObserver();
+        world = GameWorld.getGameWorld();
+    }
+
+    public void setClientInterface() {
+        this.clientInterface = new ClientInterface(this);
+    }
+
+    public boolean giveOrder() {
+        return this.clientInterface.run();
+    }
+
+    public void receiveCommand(CreateCommand command) {
+        command.execute(this);
     }
 
     public void createAirForce() {
-        Unit unit = race.createAirForce();
-        forces.add(unit);
-        GameWorld.getGameWorld().addUnit(unit);
+        if (observer.checkAmount()) {
+            Unit unit = factory.createAirForce();
+            unit.setCoords(world.generateCoords());
+            observer.handleUnit(unit);
+        }
     }
 
     public void createGroundForce() {
-        Unit unit = race.createGroundForce();
-        forces.add(unit);
-        GameWorld.getGameWorld().addUnit(unit);
+        if (observer.checkAmount()) {
+            Unit unit = factory.createGroundForce();
+            unit.setCoords(world.generateCoords());
+            observer.handleUnit(unit);
+        }
     }
 
     public void createWaterForce() {
-        Unit unit = race.createWaterForce();
-        forces.add(unit);
-        GameWorld.getGameWorld().addUnit(unit);
+        if (observer.checkAmount()) {
+            Unit unit = factory.createWaterForce();
+            unit.setCoords(world.generateCoords());
+            observer.handleUnit(unit);
+        }
     }
 
-    public void attack(Unit myUnit, Unit enemyUnit) {
-        if (!forces.contains(myUnit) || forces.contains(enemyUnit))
-            return;
-        myUnit.attack(enemyUnit);
+    public List<Unit> getUnits(boolean proper) {
+        return observer.getUnits(this.getClientFactory(), proper);
     }
 
-    public String getClientRace() {
-        return race.getClass().getTypeName();
+    public boolean properUnit(int x, int y, boolean proper) {
+        if (x < 0 || x >= GameWorldConfig.GAME_MAP_SIZE) {
+            return false;
+        }
+        if (y < 0 || y >= GameWorldConfig.GAME_MAP_SIZE) {
+            return false;
+        }
+        if (world.getUnit(x, y) == null) {
+            return false;
+        }
+        return world.getUnit(x, y).getUnitRace().equals(getClientFactory()) == proper;
     }
 
-    @Override
-    public void run() {
-        ClientInterface clientInterface = new ClientInterface(this);
-        clientInterface.show();
+    public boolean makeAttack(int allyX, int allyY, int enemyX, int enemyY) {
+        return world.getUnit(allyX, allyY).attack(world.getUnit(enemyX, enemyY));
     }
 
-    public void move(Unit myUnit, Pair<Integer, Integer> coords) {
-        if (!GameWorld.getGameWorld().findUnit(myUnit))
-            return;
-        myUnit.move(coords);
+    public boolean makeMarch(int x, int y, int deltaX, int deltaY) {
+        if (x + deltaX < 0 || x + deltaX >= GameWorldConfig.GAME_MAP_SIZE) {
+            return true;
+        }
+        if (y + deltaY < 0 || y + deltaY >= GameWorldConfig.GAME_MAP_SIZE) {
+            return true;
+        }
+        if (world.getUnit(x + deltaX, y + deltaY) != null) {
+            return true;
+        }
+        world.getUnit(x, y).march(deltaX, deltaY);
+        world.unitMarch(x, y, x + deltaX, y + deltaY);
+        return false;
+    }
+
+    public void wrapUnit(int x, int y, int wrapCode) {
+        switch (wrapCode) {
+            case 1:
+                replaceWrappedUnit(world.getUnit(x, y),
+                        new AttackImprovedForce(world.getUnit(x, y)));
+                break;
+            case 2:
+                replaceWrappedUnit(world.getUnit(x, y),
+                        new ProtectionImprovedForce(world.getUnit(x, y)));
+                break;
+        }
+    }
+
+    private void replaceWrappedUnit(Unit wrapped, Unit wrapper) {
+        observer.discardUnit(wrapped);
+        observer.handleUnit(wrapper);
+    }
+
+    private String getClientFactory() {
+        return this.factory.getClass().getTypeName();
     }
 }
